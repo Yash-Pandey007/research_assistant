@@ -1,6 +1,6 @@
 # 🤖 AI Research Assistant
 
-A full-stack web application that performs deep research on any topic. It decomposes complex questions, searches the web in parallel using Tavily, and synthesizes a comprehensive answer using Google's Gemini 1.5.
+A full-stack web application that performs deep research on any topic. It decomposes complex questions, searches the web in parallel using Tavily, and synthesizes a comprehensive answer using Google's Gemini 2.5 Pro.
 
 ## ✨ Features
 
@@ -17,7 +17,7 @@ A full-stack web application that performs deep research on any topic. It decomp
 ### Backend
 - **Language**: Python 3.10+
 - **Framework**: FastAPI (Async/Await)
-- **AI Model**: Google Gemini 1.5 Flash (Faster) or 1.5 Pro (Higher Quality)
+- **AI Model**: Google Gemini 2.5 Pro
 - **Search Engine**: Tavily AI Search
 
 ### Frontend
@@ -118,11 +118,11 @@ This runs tests for:
 ```mermaid
 graph TD
     User[User Interface] -->|POST /search| API[FastAPI Backend]
-    API -->|Decompose| Planner[Gemini 1.5 Flash]
+    API -->|Decompose| Planner[Gemini 2.5 Pro]
     Planner -->|Sub-Queries| Search[Tavily Search API]
     Search -->|Parallel Requests| Web[Internet]
     Web -->|Raw Content| Search
-    Search -->|Context| Synthesizer[Gemini 1.5 Flash]
+    Search -->|Context| Synthesizer[Gemini 2.5 Pro]
     Synthesizer -->|Final Answer| API
     API -->|JSON| User
 ```
@@ -130,7 +130,7 @@ graph TD
 ## ⚠️ Known Limitations & Costs
 
 - **Tavily Free Tier**: Limited to 1,000 searches/month.
-- **Google Gemini Free Tier**: Generous (15 requests/minute), but data may be used for model training.
+- **Google Gemini**: Rate limits depend on the specific model tier used.
 - **Latency**: Complex queries may take 10-20 seconds to ensure deep research.
 
 ## 🔧 Troubleshooting
@@ -139,7 +139,7 @@ graph TD
 - The backend is already running in another terminal. Close the other terminal or stop the process.
 
 **Error: `404 Resource Not Found` (Google API)**
-- Ensure you are using `gemini-1.5-flash` or `gemini-1.5-pro` in `llm.py`. The model `gemini-2.5-pro` does not exist.
+- This usually means the model name in `llm.py` is incorrect or you do not have access to the specific model version. Verify the string matches the model available in your Google AI Studio account.
 
 **Error: `TAVILY_API_KEY not set`**
 - Ensure your `.env` file is inside the `backend/` folder, not the root folder.
