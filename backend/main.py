@@ -6,9 +6,17 @@ import uvicorn
 
 app = FastAPI()
 
+# We explicitly list the allowed origins to satisfy browsers
+origins = [
+    "http://localhost:5173",                     # Local Frontend
+    "http://localhost:8000",                     # Local Backend
+    "https://research-assistant-topaz.vercel.app", # YOUR VERCEL APP
+    "*"                                          # Fallback for other URLs
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
