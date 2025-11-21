@@ -1,13 +1,13 @@
 # 🤖 AI Research Assistant
 
-A full-stack web application that performs deep research on any topic. It decomposes complex questions, searches the web in parallel using Tavily, and synthesizes a comprehensive answer using Google's Gemini 2.5 Pro.
+A full-stack web application that performs deep research on any topic. It decomposes complex questions, searches the web in parallel using Tavily, and synthesizes a comprehensive answer using Grok (x-ai/grok-4.1-fast:free) via OpenRouter.
 
 ## ✨ Features
 
 ✅ **Query Decomposition**: Breaks down complex user questions into targeted sub-questions.  
 ✅ **Parallel Web Search**: Uses Tavily API to perform concurrent searches for speed.  
 ✅ **Smart Extraction**: Automatically extracts relevant content from URLs (no scraping code needed).  
-✅ **LLM Synthesis**: Uses Google Gemini 2.5 Pro to generate natural language answers.  
+✅ **LLM Synthesis**: Uses Grok (x-ai/grok-4.1-fast:free) to generate natural language answers.  
 ✅ **Citations**: Every claim is backed by a source URL.  
 ✅ **Rate Limit Handling**: Intelligent delays to respect free tier API limits.  
 ✅ **Modern UI**: Clean React interface styled with Tailwind CSS.
@@ -17,7 +17,7 @@ A full-stack web application that performs deep research on any topic. It decomp
 ### Backend
 - **Language**: Python 3.10+
 - **Framework**: FastAPI (Async/Await)
-- **AI Model**: Google Gemini 2.5 Pro
+- **AI Model**: Grok (x-ai/grok-4.1-fast:free) via OpenRouter
 - **Search Engine**: Tavily AI Search
 
 ### Frontend
@@ -56,10 +56,10 @@ pip install -r requirements.txt
 
 Create a `.env` file inside the `backend/` folder:
 ```env
-GOOGLE_API_KEY=your_google_key_here
+OPENROUTER_API_KEY=your_openrouter_key_here
 TAVILY_API_KEY=tvly-your_tavily_key_here
 ```
-*Get keys here: [Google AI Studio](https://aistudio.google.com/) | [Tavily](https://tavily.com/)*
+*Get keys here: [OpenRouter](https://openrouter.ai/) | [Tavily](https://tavily.com/)*
 
 Start the Python Server:
 ```bash
@@ -118,11 +118,11 @@ This runs tests for:
 ```mermaid
 graph TD
     User[User Interface] -->|POST /search| API[FastAPI Backend]
-    API -->|Decompose| Planner[Gemini 2.5 Pro]
+    API -->|Decompose| Planner[Grok (OpenRouter)]
     Planner -->|Sub-Queries| Search[Tavily Search API]
     Search -->|Parallel Requests| Web[Internet]
     Web -->|Raw Content| Search
-    Search -->|Context| Synthesizer[Gemini 2.5 Pro]
+    Search -->|Context| Synthesizer[Grok (OpenRouter)]
     Synthesizer -->|Final Answer| API
     API -->|JSON| User
 ```
@@ -130,7 +130,7 @@ graph TD
 ## ⚠️ Known Limitations & Costs
 
 - **Tavily Free Tier**: Limited to 1,000 searches/month.
-- **Google Gemini**: Rate limits depend on the specific model tier used.
+- **OpenRouter**: Rate limits depend on the specific model and OpenRouter tier.
 - **Latency**: Complex queries may take 10-20 seconds to ensure deep research.
 
 ## 🔧 Troubleshooting
@@ -138,8 +138,8 @@ graph TD
 **Error: `[Errno 10048] only one usage of each socket address...`**
 - The backend is already running in another terminal. Close the other terminal or stop the process.
 
-**Error: `404 Resource Not Found` (Google API)**
-- This usually means the model name in `llm.py` is incorrect or you do not have access to the specific model version. Verify the string matches the model available in your Google AI Studio account.
+**Error: `404 Resource Not Found` (OpenRouter)**
+- This usually means the model name in `llm.py` is incorrect or the model is not available on OpenRouter. Verify the model ID on OpenRouter.
 
 **Error: `TAVILY_API_KEY not set`**
 - Ensure your `.env` file is inside the `backend/` folder, not the root folder.
