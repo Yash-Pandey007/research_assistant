@@ -3,4 +3,4 @@ uvicorn
 httpx
 python-dotenv
 openai
-tavily
+tavily-python
