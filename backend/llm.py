@@ -13,7 +13,7 @@ class LLMClient:
         
         # FIXED: Changed from 'gemini-2.5-pro' (doesn't exist) to 'gemini-1.5-flash'
         # You can also use 'gemini-1.5-pro' if you want higher quality but slower speed.
-        self.model = genai.GenerativeModel('gemini-1.5-pro')
+        self.model = genai.GenerativeModel('gemini-2.5-pro')
 
     async def generate_text(self, prompt: str) -> str:
         try:

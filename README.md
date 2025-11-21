@@ -1,179 +1,148 @@
-# Research Assistant
+# 🤖 AI Research Assistant
 
-A web-based research assistant that answers questions by searching the web and synthesizing findings using an LLM.
+A full-stack web application that performs deep research on any topic. It decomposes complex questions, searches the web in parallel using Tavily, and synthesizes a comprehensive answer using Google's Gemini 1.5.
 
-## Features
+## ✨ Features
 
-✅ **Query Decomposition**: Breaks down complex questions into targeted search queries  
-✅ **Web Search**: Uses Tavily API (purpose-built for AI/RAG)  
-✅ **Content Extraction**: Automatic extraction with Tavily (no scraping needed!)  
-✅ **LLM Synthesis**: Uses Google AI (Gemini 2.5 Pro) to synthesize answers  
-✅ **Source Citations**: Properly cites all sources with URLs  
-✅ **Deep Search Mode**: Adds delays between queries to avoid rate limits  
-✅ **Insufficient Information Handling**: Clearly states when information is unavailable  
+✅ **Query Decomposition**: Breaks down complex user questions into targeted sub-questions.  
+✅ **Parallel Web Search**: Uses Tavily API to perform concurrent searches for speed.  
+✅ **Smart Extraction**: Automatically extracts relevant content from URLs (no scraping code needed).  
+✅ **LLM Synthesis**: Uses Google Gemini 2.5 Pro to generate natural language answers.  
+✅ **Citations**: Every claim is backed by a source URL.  
+✅ **Rate Limit Handling**: Intelligent delays to respect free tier API limits.  
+✅ **Modern UI**: Clean React interface styled with Tailwind CSS.
 
-## Tech Stack
-
-### Backend
-- **FastAPI**: REST API
-- **Google Generative AI**: LLM (Gemini 2.5 Pro)
-- **Tavily API**: AI-optimized search with automatic content extraction
-- **Python 3.x**
-
-### Frontend
-- **React**: UI framework
-- **Vite**: Build tool
-- **Tailwind CSS v4**: Styling
-
-## Setup
+## 🛠️ Tech Stack
 
 ### Backend
-
-1. **Get API Keys:**
-   - **Google AI**: Get free key at [ai.google.dev](https://ai.google.dev/)
-   - **Tavily**: Sign up at [tavily.com](https://tavily.com/) (100 free searches/month)
-
-2. Navigate to backend directory:
-   ```bash
-   cd backend
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Create `.env` file:
-   ```env
-   GOOGLE_API_KEY=your_google_api_key_here
-   TAVILY_API_KEY=tvly-your_tavily_api_key_here
-   ```
-
-5. Start the server:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   Backend runs at: `http://localhost:8000`
+- **Language**: Python 3.10+
+- **Framework**: FastAPI (Async/Await)
+- **AI Model**: Google Gemini 1.5 Flash (Faster) or 1.5 Pro (Higher Quality)
+- **Search Engine**: Tavily AI Search
 
 ### Frontend
+- **Framework**: React (Vite)
+- **HTTP Client**: Axios
+- **Styling**: Tailwind CSS
 
-1. Navigate to frontend directory:
-   ```bash
-   cd frontend
-   ```
+---
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+## 🚀 Setup & Installation
 
-3. Start the dev server:
-   ```bash
-   npm run dev
-   ```
-   Frontend runs at: `http://localhost:5173`
+### Prerequisites
+- Python 3.8 or higher
+- Node.js & npm
 
-## Usage
+### 1. Backend Setup
 
-1. Open `http://localhost:5173` in your browser
-2. Enter your question in the search box
-3. Click "Search" or press Enter
-4. Wait 15-30 seconds for deep search to complete
-5. View the synthesized answer and sources
+Navigate to the backend folder:
+```bash
+cd backend
+```
 
-### Example Questions
+Create a virtual environment (recommended) and install dependencies:
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
 
-- **"What is Python programming language?"**
-- **"Latest developments in quantum computing"**
-- **"Benefits of meditation"**
-- **"Compare iPhone 15 and Pixel 8"**
-- **"Explain blockchain in simple terms"**
+# Mac/Linux
+python3 -m venv venv
+source venv/bin/activate
 
-## Tavily Features Used
+# Install libraries
+pip install -r requirements.txt
+```
 
-This implementation uses all three Tavily functions:
+Create a `.env` file inside the `backend/` folder:
+```env
+GOOGLE_API_KEY=your_google_key_here
+TAVILY_API_KEY=tvly-your_tavily_key_here
+```
+*Get keys here: [Google AI Studio](https://aistudio.google.com/) | [Tavily](https://tavily.com/)*
 
-1. **Search**: Main search with automatic content extraction
-2. **Extract**: Extract content from specific URLs
-3. **Crawl**: Crawl websites for comprehensive content
+Start the Python Server:
+```bash
+python main.py
+```
+*Server runs at: `http://localhost:8000`*
 
-## Testing
+### 2. Frontend Setup
 
-Run the comprehensive test suite:
+Open a new terminal and navigate to the frontend folder:
+```bash
+cd frontend
+```
+
+Install dependencies and start the UI:
+```bash
+npm install
+npm run dev
+```
+*UI runs at: `http://localhost:5173`*
+
+---
+
+## 📖 Usage
+
+1. Ensure both Backend and Frontend terminals are running.
+2. Open `http://localhost:5173` in your browser.
+3. Type a question (e.g., *"What are the latest breakthroughs in Solid State Batteries?"*).
+4. Click **Search**.
+5. The agent will:
+   - Plan the research steps.
+   - Search the web for multiple sub-topics.
+   - Read the content.
+   - Write a summarized answer with sources.
+
+---
+
+## 🧪 Testing
+
+The backend includes a comprehensive test suite to verify logic and API connections.
+
 ```bash
 cd backend
 python comprehensive_test.py
 ```
+This runs tests for:
+- Factual queries
+- Comparison queries
+- Recent news
+- Error handling
 
-## API Endpoints
+---
 
-### `POST /search`
-Perform a research query.
+## 🏗️ Architecture
 
-**Request:**
-```json
-{
-  "query": "Your question here"
-}
+```mermaid
+graph TD
+    User[User Interface] -->|POST /search| API[FastAPI Backend]
+    API -->|Decompose| Planner[Gemini 1.5 Flash]
+    Planner -->|Sub-Queries| Search[Tavily Search API]
+    Search -->|Parallel Requests| Web[Internet]
+    Web -->|Raw Content| Search
+    Search -->|Context| Synthesizer[Gemini 1.5 Flash]
+    Synthesizer -->|Final Answer| API
+    API -->|JSON| User
 ```
 
-**Response:**
-```json
-{
-  "answer": "Synthesized answer with citations...",
-  "sources": [
-    {
-      "url": "https://example.com",
-      "title": "Page Title",
-      "content": "Extracted content..."
-    }
-  ]
-}
-```
+## ⚠️ Known Limitations & Costs
 
-### `GET /health`
-Health check endpoint.
+- **Tavily Free Tier**: Limited to 1,000 searches/month.
+- **Google Gemini Free Tier**: Generous (15 requests/minute), but data may be used for model training.
+- **Latency**: Complex queries may take 10-20 seconds to ensure deep research.
 
-## Architecture
+## 🔧 Troubleshooting
 
-```
-User Question
-    ↓
-Query Decomposition (Gemini 2.5 Pro)
-    ↓
-Generate 2-3 Search Queries
-    ↓
-Tavily Search (per query with 3s delay)
-    ↓
-Automatic Content Extraction (Tavily)
-    ↓
-Synthesize Answer (Gemini 2.5 Pro)
-    ↓
-Return Answer + Sources
-```
+**Error: `[Errno 10048] only one usage of each socket address...`**
+- The backend is already running in another terminal. Close the other terminal or stop the process.
 
-## Cost
+**Error: `404 Resource Not Found` (Google API)**
+- Ensure you are using `gemini-1.5-flash` or `gemini-1.5-pro` in `llm.py`. The model `gemini-2.5-pro` does not exist.
 
-- **Google AI**: Free tier (60 requests/minute for Gemini 2.5 Pro)
-- **Tavily**: 100 free searches/month, then $0.50 per 1000 searches
-
-## Known Limitations
-
-1. **Search Limits**: Tavily free tier = 100 searches/month
-2. **Response Time**: 15-30 seconds per query (3 searches × 3s delay + processing)
-3. **Query Quality**: Complex abstract queries may not find relevant results
-
-## Troubleshooting
-
-**"TAVILY_API_KEY environment variable not set" error:**
-1. Sign up at tavily.com
-2. Get your API key
-3. Add it to `.env` file
-
-**Empty answers:**
-- Check that both API keys are valid
-- Verify you haven't exceeded Tavily's monthly limit
-- Check backend logs for errors
+**Error: `TAVILY_API_KEY not set`**
+- Ensure your `.env` file is inside the `backend/` folder, not the root folder.
 
 ## License
 
